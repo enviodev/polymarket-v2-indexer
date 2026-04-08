@@ -65,7 +65,7 @@ describe("Rewards", () => {
                   "blockNumber": 84902320,
                   "consumedAmount": undefined,
                   "endTime": 1700086400,
-                  "id": "-1",
+                  "id": "137_84902320_1",
                   "isEarlyWithdraw": undefined,
                   "market_id": "0xaaaa000000000000000000000000000000000000000000000000000000000001",
                   "ratePerMinute": 3472n,
@@ -182,7 +182,7 @@ describe("Rewards", () => {
                 {
                   "amount": 250000n,
                   "blockNumber": 84902320,
-                  "id": "-0",
+                  "id": "137_84902320_0",
                   "timestamp": 0,
                   "transactionHash": "",
                   "user": "0x5555555555555555555555555555555555555555",

@@ -1,7 +1,7 @@
 import { Rewards } from "generated";
 
-const eventId = (event: { transaction: { hash: string }; logIndex: number }) =>
-  `${event.transaction.hash}-${event.logIndex}`;
+const eventId = (event: { chainId: number; block: { number: number }; logIndex: number }) =>
+  `${event.chainId}_${event.block.number}_${event.logIndex}`;
 
 // ── Reward Distribution ────────────────────────────────────────────
 

@@ -2,8 +2,8 @@ import { CTFExchangeV2 } from "generated";
 
 const ZERO_BYTES32 = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
-const eventId = (event: { transaction: { hash: string }; logIndex: number }) =>
-  `${event.transaction.hash}-${event.logIndex}`;
+const eventId = (event: { chainId: number; block: { number: number }; logIndex: number }) =>
+  `${event.chainId}_${event.block.number}_${event.logIndex}`;
 
 const getOrInitStats = async (context: any, id: string) =>
   context.ExchangeStats.getOrCreate({
