@@ -2,15 +2,33 @@
 #  Polymarket V2 Indexer — Schema
 # ═══════════════════════════════════════════════════════════════════════
 
+# ── Market Metadata (enriched via Gamma API) ────────────────────────
+
+type Market {
+  id: ID!                              # tokenId (decimal string)
+  question: String!
+  slug: String!
+  outcomes: String!                    # JSON array e.g. '["Yes","No"]'
+  outcomePrices: String!               # JSON array e.g. '["0.6","0.4"]'
+  description: String!
+  image: String!
+  startDate: String!
+  endDate: String!
+  conditionId: String!
+  fills: [OrderFill!]! @derivedFrom(field: "market")
+  matches: [OrderMatch!]! @derivedFrom(field: "market")
+}
+
 # ── Trading ─────────────────────────────────────────────────────────
 
 type OrderFill {
-  id: ID!                              # txHash-logIndex
+  id: ID!
   orderHash: String!
   maker: String!
   taker: String!
   side: Int!                           # 0=BUY, 1=SELL
   tokenId: BigInt!                     # conditional token ID
+  market: Market                       # enriched from Gamma API
   makerAmountFilled: BigInt!
   takerAmountFilled: BigInt!
   fee: BigInt!
@@ -24,11 +42,12 @@ type OrderFill {
 }
 
 type OrderMatch {
-  id: ID!                              # txHash-logIndex
+  id: ID!
   takerOrderHash: String!
   takerOrderMaker: String!
   side: Int!                           # 0=BUY, 1=SELL
   tokenId: BigInt!
+  market: Market                       # enriched from Gamma API
   makerAmountFilled: BigInt!
   takerAmountFilled: BigInt!
   exchange: String!

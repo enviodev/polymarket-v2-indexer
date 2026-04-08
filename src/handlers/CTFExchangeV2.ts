@@ -1,4 +1,5 @@
 import { CTFExchangeV2 } from "generated";
+import { getMarketMetadata } from "../effects/marketMetadata";
 
 const ZERO_BYTES32 = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
@@ -15,10 +16,42 @@ const getOrInitStats = async (context: any, id: string) =>
     totalBuilderFills: 0n,
   });
 
+const ensureMarket = async (context: any, tokenId: bigint) => {
+  const tokenIdStr = tokenId.toString();
+  const existing = await context.Market.get(tokenIdStr);
+  if (existing) return tokenIdStr;
+
+  // Skip effect during preload — effects populate cache during preload
+  // and return results during the real processing run
+  try {
+    const meta = await context.effect(getMarketMetadata, tokenIdStr);
+    if (meta) {
+      context.Market.set({
+        id: tokenIdStr,
+        question: meta.question,
+        slug: meta.slug,
+        outcomes: meta.outcomes,
+        outcomePrices: meta.outcomePrices,
+        description: meta.description,
+        image: meta.image,
+        startDate: meta.startDate,
+        endDate: meta.endDate,
+        conditionId: meta.conditionId,
+      });
+      return tokenIdStr;
+    }
+  } catch (e) {
+    context.log.warn(`Failed to fetch market metadata for tokenId ${tokenIdStr}: ${e}`);
+  }
+
+  return undefined;
+};
+
 // ── Trading ────────────────────────────────────────────────────────
 
 CTFExchangeV2.OrderFilled.handler(async ({ event, context }) => {
   const stats = await getOrInitStats(context, event.srcAddress);
+  const marketId = await ensureMarket(context, event.params.tokenId);
 
   context.OrderFill.set({
     id: eventId(event),
@@ -27,6 +60,7 @@ CTFExchangeV2.OrderFilled.handler(async ({ event, context }) => {
     taker: event.params.taker,
     side: Number(event.params.side),
     tokenId: event.params.tokenId,
+    market_id: marketId,
     makerAmountFilled: event.params.makerAmountFilled,
     takerAmountFilled: event.params.takerAmountFilled,
     fee: event.params.fee,
@@ -52,6 +86,7 @@ CTFExchangeV2.OrderFilled.handler(async ({ event, context }) => {
 
 CTFExchangeV2.OrdersMatched.handler(async ({ event, context }) => {
   const stats = await getOrInitStats(context, event.srcAddress);
+  const marketId = await ensureMarket(context, event.params.tokenId);
 
   context.OrderMatch.set({
     id: eventId(event),
@@ -59,6 +94,7 @@ CTFExchangeV2.OrdersMatched.handler(async ({ event, context }) => {
     takerOrderMaker: event.params.takerOrderMaker,
     side: Number(event.params.side),
     tokenId: event.params.tokenId,
+    market_id: marketId,
     makerAmountFilled: event.params.makerAmountFilled,
     takerAmountFilled: event.params.takerAmountFilled,
     exchange: event.srcAddress,
