@@ -20,13 +20,13 @@ Indexes the new Polymarket V2 exchange stack on Polygon, built with [Envio Hyper
 
 ## Schema
 
-- `OrderFill` — every V2 trade with maker, taker, side, tokenId, fee, builder code
-- `OrderMatch` — matched order pairs
-- `FeeEvent` — fee collection
-- `PolyUSDTransfer` / `PolyUSDWrap` / `PolyUSDAccount` — pUSD flow and balances
-- `PolyUSDStats` — total supply, wrapped/unwrapped volumes
-- `ExchangeStats` — per-exchange aggregates (volume, fills, fees, builder fills)
-- `SponsoredMarket` / `Sponsorship` / `RewardDistribution` — rewards system
+- `OrderFill`: every V2 trade with maker, taker, side, tokenId, fee, builder code
+- `OrderMatch`: matched order pairs
+- `FeeEvent`: fee collection
+- `PolyUSDTransfer` / `PolyUSDWrap` / `PolyUSDAccount`: pUSD flow and balances
+- `PolyUSDStats`: total supply, wrapped/unwrapped volumes
+- `ExchangeStats`: per-exchange aggregates (volume, fills, fees, builder fills)
+- `SponsoredMarket` / `Sponsorship` / `RewardDistribution`: rewards system
 
 ## Run locally
 
