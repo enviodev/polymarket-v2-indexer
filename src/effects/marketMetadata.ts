@@ -31,13 +31,15 @@ export const getMarketMetadata = createEffect(
     // params work; the response is wrapped in { markets: [...] } instead
     // of being a bare array.
     //
-    // 2s timeout: rare undici-pool connections hang for tens of seconds.
-    // Throw on timeout/non-2xx so envio does NOT cache the failure — only
-    // valid data lands in the cache. The OrderFill for this event keeps
-    // market_id=null; the next event with the same tokenId retries fresh.
+    // 1s timeout: ~0.5% of Gamma calls hang for 30+ seconds (stale upstream
+    // sockets). Legitimate responses are <400ms even under rate-limit pressure,
+    // so 1s is ~2.5× the worst observed real latency. Throw on timeout/non-2xx
+    // so envio does NOT cache the failure — only valid data lands in the cache.
+    // The OrderFill for this event keeps market_id=null; the next event with
+    // the same tokenId retries fresh.
     const res = await fetch(
       `https://gamma-api.polymarket.com/markets/keyset?clob_token_ids=${tokenId}`,
-      { signal: AbortSignal.timeout(2_000) },
+      { signal: AbortSignal.timeout(1_000) },
     );
     if (!res.ok) {
       throw new Error(`Gamma API ${res.status} for tokenId ${tokenId}`);
