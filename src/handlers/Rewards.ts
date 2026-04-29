@@ -3,6 +3,9 @@ import { Rewards } from "generated";
 const eventId = (event: { chainId: number; block: { number: number }; logIndex: number }) =>
   `${event.chainId}_${event.block.number}_${event.logIndex}`;
 
+/** Canonical form for Sponsor lookups across Sponsored / Withdrawn. */
+const normAddr = (a: string) => a.toLowerCase();
+
 // ── Reward Distribution ────────────────────────────────────────────
 
 Rewards.DistributedRewards.handler(async ({ event, context }) => {
@@ -36,7 +39,7 @@ Rewards.Sponsored.handler(async ({ event, context }) => {
   context.Sponsorship.set({
     id: eventId(event),
     market_id: event.params.marketId,
-    sponsor: event.params.sponsor,
+    sponsor: normAddr(event.params.sponsor),
     amount: event.params.amount,
     startTime: Number(event.params.startTime),
     endTime: Number(event.params.endTime),
@@ -51,11 +54,30 @@ Rewards.Sponsored.handler(async ({ event, context }) => {
 });
 
 Rewards.Withdrawn.handler(async ({ event, context }) => {
-  // Find the sponsorship to update — use market+sponsor as lookup
-  // Since we can't easily find the exact sponsorship entity, log it
-  context.log.info(
-    `Withdrawal from market ${event.params.marketId} by ${event.params.sponsor}: returned=${event.params.returnedAmount} consumed=${event.params.consumedAmount} early=${event.params.isEarlyWithdraw}`
-  );
+  const marketId = event.params.marketId;
+  const sponsor = normAddr(event.params.sponsor);
+
+  const byMarket = await context.Sponsorship.getWhere({
+    market_id: { _eq: marketId },
+  });
+
+  const opens = byMarket.filter((s) => normAddr(s.sponsor) === sponsor && !s.withdrawn);
+
+  if (!opens.length) {
+    context.log.warn(
+      `withdrawn: no open sponsorship for market=${marketId} sponsor=${sponsor}`
+    );
+    return;
+  }
+
+  const row = [...opens].sort((a, b) => b.blockNumber - a.blockNumber)[0]!;
+  context.Sponsorship.set({
+    ...row,
+    withdrawn: true,
+    returnedAmount: event.params.returnedAmount,
+    consumedAmount: event.params.consumedAmount,
+    isEarlyWithdraw: event.params.isEarlyWithdraw,
+  });
 });
 
 Rewards.MarketClosed.handler(async ({ event, context }) => {

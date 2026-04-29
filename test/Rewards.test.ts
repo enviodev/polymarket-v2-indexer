@@ -90,6 +90,61 @@ describe("Rewards", () => {
     t.expect(market.minSponsorDuration).toBe(86400);
   });
 
+  it("indexes Withdrawn and updates Sponsorship totals", async (t) => {
+    const indexer = createTestIndexer();
+    const marketId = "0xdddd000000000000000000000000000000000000000000000000000000000001";
+
+    await indexer.process({
+      chains: {
+        137: {
+          simulate: [
+            {
+              contract: "Rewards",
+              event: "MarketCreated",
+              params: {
+                marketId,
+                startTime: 1700000000n,
+                minSponsorDuration: 86400n,
+                minSponsorAmount: 1000000n,
+                marketData: "0x",
+              },
+            },
+            {
+              contract: "Rewards",
+              event: "Sponsored",
+              params: {
+                marketId,
+                sponsor: "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                amount: 5000000n,
+                startTime: 1700000000n,
+                endTime: 1700086400n,
+                ratePerMinute: 3472n,
+              },
+            },
+            {
+              contract: "Rewards",
+              event: "Withdrawn",
+              params: {
+                marketId,
+                sponsor: "0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                returnedAmount: 1000000n,
+                consumedAmount: 900000n,
+                isEarlyWithdraw: true,
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    const spId = "137_84902320_1";
+    const sponsorship = await indexer.Sponsorship.getOrThrow(spId);
+    t.expect(sponsorship.withdrawn).toBe(true);
+    t.expect(sponsorship.returnedAmount).toBe(1000000n);
+    t.expect(sponsorship.consumedAmount).toBe(900000n);
+    t.expect(sponsorship.isEarlyWithdraw).toBe(true);
+  });
+
   it("indexes MarketClosed via simulate", async (t) => {
     const indexer = createTestIndexer();
     const marketId = "0xbbbb000000000000000000000000000000000000000000000000000000000001";
