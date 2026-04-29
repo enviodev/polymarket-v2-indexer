@@ -30,6 +30,15 @@ Indexes the new Polymarket V2 exchange stack on Polygon, built with [Envio Hyper
 
 ## Run locally
 
+A HyperSync API token is required. Create one at https://envio.dev/app/api-tokens, then:
+
+```bash
+cp .env.example .env
+# edit .env and set ENVIO_API_TOKEN to your token
+```
+
+Then:
+
 ```bash
 pnpm install
 pnpm codegen
