@@ -29,6 +29,46 @@ describe("CTF Exchange V2", () => {
                 },
               ],
             },
+            "Market": {
+              "sets": [
+                {
+                  "conditionId": "0x182390641d3b1b47cc64274b9da290efd04221c586651ba190880713da6347d9",
+                  "description": "This market will resolve to "Yes" if an official agreement over Iranian nuclear research and/or nuclear weapon development, defined as a publicly announced mutual agreement, is reached between the United States and Iran by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.
+
+      If such an agreement is officially reached before the resolution date, this market will resolve to "Yes", regardless of if/when the agreement goes into effect.
+
+      Agreements that include the United States and Iran as parties, even if they also involve other countries (e.g., a multilateral deal like the JCPOA), will qualify for resolution.
+
+      The primary resolution source for this market will be an official announcement by the United States and/or the Islamic Republic of Iran, however an overwhelming consensus of credible reporting confirming an agreement has been reached will also qualify.",
+                  "endDate": "2026-12-31T00:00:00Z",
+                  "id": "102936224134271070189104847090829839924697394514566827387181305960175107677216",
+                  "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
+                  "outcomePrices": "["0.525", "0.475"]",
+                  "outcomes": "["Yes", "No"]",
+                  "question": "US-Iran nuclear deal before 2027?",
+                  "slug": "us-iran-nuclear-deal-before-2027",
+                  "startDate": "2025-11-05T16:48:16.494Z",
+                },
+                {
+                  "conditionId": "0x182390641d3b1b47cc64274b9da290efd04221c586651ba190880713da6347d9",
+                  "description": "This market will resolve to "Yes" if an official agreement over Iranian nuclear research and/or nuclear weapon development, defined as a publicly announced mutual agreement, is reached between the United States and Iran by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.
+
+      If such an agreement is officially reached before the resolution date, this market will resolve to "Yes", regardless of if/when the agreement goes into effect.
+
+      Agreements that include the United States and Iran as parties, even if they also involve other countries (e.g., a multilateral deal like the JCPOA), will qualify for resolution.
+
+      The primary resolution source for this market will be an official announcement by the United States and/or the Islamic Republic of Iran, however an overwhelming consensus of credible reporting confirming an agreement has been reached will also qualify.",
+                  "endDate": "2026-12-31T00:00:00Z",
+                  "id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
+                  "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
+                  "outcomePrices": "["0.525", "0.475"]",
+                  "outcomes": "["Yes", "No"]",
+                  "question": "US-Iran nuclear deal before 2027?",
+                  "slug": "us-iran-nuclear-deal-before-2027",
+                  "startDate": "2025-11-05T16:48:16.494Z",
+                },
+              ],
+            },
             "OrderFill": {
               "sets": [
                 {
@@ -39,6 +79,7 @@ describe("CTF Exchange V2", () => {
                   "id": "137_85050371_255",
                   "maker": "0x6e0c80c90ea6c15917308F820Eac91Ce2724B5b5",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "102936224134271070189104847090829839924697394514566827387181305960175107677216",
                   "metadata": "0x0000000000000000000000000000000000000000000000000000000000000000",
                   "orderHash": "0xe6fb5cb4d88c728f34ebc10ba8a641fc646a1baf99e74d89192614973c1af784",
                   "side": 0,
@@ -57,6 +98,7 @@ describe("CTF Exchange V2", () => {
                   "id": "137_85050371_257",
                   "maker": "0xd74b83e161d23ef17C6247d4b2f6Be07160cEd75",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "metadata": "0x0000000000000000000000000000000000000000000000000000000000000000",
                   "orderHash": "0x0c970e909e59bc0632c4687337ae0c1b9a45ac8caa18d18d776d7d692a51b206",
                   "side": 0,
@@ -76,6 +118,7 @@ describe("CTF Exchange V2", () => {
                   "exchange": "0xE111180000d2663C0091e4f400237545B87B996B",
                   "id": "137_85050371_258",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "side": 0,
                   "takerAmountFilled": 5000000n,
                   "takerOrderHash": "0x0c970e909e59bc0632c4687337ae0c1b9a45ac8caa18d18d776d7d692a51b206",
@@ -210,6 +253,46 @@ describe("CTF Exchange V2", () => {
       {
         "changes": [
           {
+            "Market": {
+              "sets": [
+                {
+                  "conditionId": "0x182390641d3b1b47cc64274b9da290efd04221c586651ba190880713da6347d9",
+                  "description": "This market will resolve to "Yes" if an official agreement over Iranian nuclear research and/or nuclear weapon development, defined as a publicly announced mutual agreement, is reached between the United States and Iran by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.
+
+      If such an agreement is officially reached before the resolution date, this market will resolve to "Yes", regardless of if/when the agreement goes into effect.
+
+      Agreements that include the United States and Iran as parties, even if they also involve other countries (e.g., a multilateral deal like the JCPOA), will qualify for resolution.
+
+      The primary resolution source for this market will be an official announcement by the United States and/or the Islamic Republic of Iran, however an overwhelming consensus of credible reporting confirming an agreement has been reached will also qualify.",
+                  "endDate": "2026-12-31T00:00:00Z",
+                  "id": "102936224134271070189104847090829839924697394514566827387181305960175107677216",
+                  "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
+                  "outcomePrices": "["0.525", "0.475"]",
+                  "outcomes": "["Yes", "No"]",
+                  "question": "US-Iran nuclear deal before 2027?",
+                  "slug": "us-iran-nuclear-deal-before-2027",
+                  "startDate": "2025-11-05T16:48:16.494Z",
+                },
+                {
+                  "conditionId": "0x182390641d3b1b47cc64274b9da290efd04221c586651ba190880713da6347d9",
+                  "description": "This market will resolve to "Yes" if an official agreement over Iranian nuclear research and/or nuclear weapon development, defined as a publicly announced mutual agreement, is reached between the United States and Iran by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to “No”.
+
+      If such an agreement is officially reached before the resolution date, this market will resolve to "Yes", regardless of if/when the agreement goes into effect.
+
+      Agreements that include the United States and Iran as parties, even if they also involve other countries (e.g., a multilateral deal like the JCPOA), will qualify for resolution.
+
+      The primary resolution source for this market will be an official announcement by the United States and/or the Islamic Republic of Iran, however an overwhelming consensus of credible reporting confirming an agreement has been reached will also qualify.",
+                  "endDate": "2026-12-31T00:00:00Z",
+                  "id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
+                  "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
+                  "outcomePrices": "["0.525", "0.475"]",
+                  "outcomes": "["Yes", "No"]",
+                  "question": "US-Iran nuclear deal before 2027?",
+                  "slug": "us-iran-nuclear-deal-before-2027",
+                  "startDate": "2025-11-05T16:48:16.494Z",
+                },
+              ],
+            },
             "OrderFill": {
               "sets": [
                 {
@@ -220,6 +303,7 @@ describe("CTF Exchange V2", () => {
                   "id": "137_85050371_255",
                   "maker": "0x6e0c80c90ea6c15917308F820Eac91Ce2724B5b5",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "102936224134271070189104847090829839924697394514566827387181305960175107677216",
                   "metadata": "0x0000000000000000000000000000000000000000000000000000000000000000",
                   "orderHash": "0xe6fb5cb4d88c728f34ebc10ba8a641fc646a1baf99e74d89192614973c1af784",
                   "side": 0,
@@ -238,6 +322,7 @@ describe("CTF Exchange V2", () => {
                   "id": "137_85050371_257",
                   "maker": "0xd74b83e161d23ef17C6247d4b2f6Be07160cEd75",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "metadata": "0x0000000000000000000000000000000000000000000000000000000000000000",
                   "orderHash": "0x0c970e909e59bc0632c4687337ae0c1b9a45ac8caa18d18d776d7d692a51b206",
                   "side": 0,
@@ -257,6 +342,7 @@ describe("CTF Exchange V2", () => {
                   "exchange": "0xE111180000d2663C0091e4f400237545B87B996B",
                   "id": "137_85050371_258",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "side": 0,
                   "takerAmountFilled": 5000000n,
                   "takerOrderHash": "0x0c970e909e59bc0632c4687337ae0c1b9a45ac8caa18d18d776d7d692a51b206",
@@ -349,6 +435,7 @@ describe("CTF Exchange V2", () => {
                   "id": "137_85050645_5194",
                   "maker": "0x6e0c80c90ea6c15917308F820Eac91Ce2724B5b5",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "102936224134271070189104847090829839924697394514566827387181305960175107677216",
                   "metadata": "0x0000000000000000000000000000000000000000000000000000000000000000",
                   "orderHash": "0xdca4a82478b15484522636905a5cc2a85fe7b34b4d1e1fdcc24d700bcca6f68e",
                   "side": 0,
@@ -367,6 +454,7 @@ describe("CTF Exchange V2", () => {
                   "id": "137_85050645_5196",
                   "maker": "0xd74b83e161d23ef17C6247d4b2f6Be07160cEd75",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "metadata": "0x0000000000000000000000000000000000000000000000000000000000000000",
                   "orderHash": "0x2817eef50ab3aef3fc394856b3cf8d8712a36d267bf37fe9115f3deb987f7d55",
                   "side": 0,
@@ -386,6 +474,7 @@ describe("CTF Exchange V2", () => {
                   "exchange": "0xE111180000d2663C0091e4f400237545B87B996B",
                   "id": "137_85050645_5197",
                   "makerAmountFilled": 2500000n,
+                  "market_id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "side": 0,
                   "takerAmountFilled": 5000000n,
                   "takerOrderHash": "0x2817eef50ab3aef3fc394856b3cf8d8712a36d267bf37fe9115f3deb987f7d55",
@@ -565,6 +654,7 @@ describe("CTF Exchange V2", () => {
                   "id": "137_84902320_0",
                   "maker": "0x1111111111111111111111111111111111111111",
                   "makerAmountFilled": 5000000n,
+                  "market_id": undefined,
                   "metadata": "0x0000000000000000000000000000000000000000000000000000000000000000",
                   "orderHash": "0xaaaa000000000000000000000000000000000000000000000000000000000001",
                   "side": 0,
@@ -640,6 +730,7 @@ describe("CTF Exchange V2", () => {
                   "exchange": "0xE111180000d2663C0091e4f400237545B87B996B",
                   "id": "137_84902320_0",
                   "makerAmountFilled": 3000000n,
+                  "market_id": undefined,
                   "side": 1,
                   "takerAmountFilled": 6000000n,
                   "takerOrderHash": "0xcccc000000000000000000000000000000000000000000000000000000000001",
