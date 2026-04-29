@@ -29,6 +29,7 @@ build/
 benchmarks/
 artifacts
 cache
+!.envio/cache/
 *.res.js
 *.res.mjs
 generated
