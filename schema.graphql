@@ -121,7 +121,7 @@ type SponsoredMarket {
 
 type Sponsorship {
   id: ID!                              # txHash-logIndex
-  market: SponsoredMarket!
+  market: SponsoredMarket! @index
   sponsor: String!
   amount: BigInt!
   startTime: Int!
