@@ -4,7 +4,7 @@ description: Polymarket V2 — CTF Exchange, PolyUSD, Rewards
 
 storage:
   postgres: true
-  # clickhouse: true  # enable to additionally sync indexed data to ClickHouse
+  clickhouse: true # enable to additionally sync indexed data to ClickHouse
 
 field_selection:
   transaction_fields:
