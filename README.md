@@ -1,4 +1,4 @@
-# Polymarket V2 Indexer
+# Polymarket V2 Indexer 
 
 Indexes the new Polymarket V2 exchange stack on Polygon, built with [Envio HyperIndex](https://docs.envio.dev).
 
