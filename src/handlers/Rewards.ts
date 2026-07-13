@@ -62,11 +62,20 @@ indexer.onEvent(
 indexer.onEvent(
   { contract: "Rewards", event: "Withdrawn" },
   async ({ event, context }) => {
-    // Find the sponsorship to update — use market+sponsor as lookup
-    // Since we can't easily find the exact sponsorship entity, log it
-    context.log.info(
-      `Withdrawal from market ${event.params.marketId} by ${event.params.sponsor}: returned=${event.params.returnedAmount} consumed=${event.params.consumedAmount} early=${event.params.isEarlyWithdraw}`,
-    );
+    // Sponsorship rows are an insert-only ClickHouse stream, so withdrawals
+    // are recorded as their own entities and joined at query time on
+    // (market, sponsor).
+    context.SponsorshipWithdrawal.set({
+      id: eventId(event),
+      market_id: event.params.marketId,
+      sponsor: event.params.sponsor,
+      returnedAmount: event.params.returnedAmount,
+      consumedAmount: event.params.consumedAmount,
+      isEarlyWithdraw: event.params.isEarlyWithdraw,
+      timestamp: event.block.timestamp,
+      blockNumber: event.block.number,
+      transactionHash: event.transaction.hash,
+    });
   },
 );
 

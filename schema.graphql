@@ -5,11 +5,11 @@
 # ── Market Metadata (enriched via Gamma API) ────────────────────────
 
 type Market @storage(postgres: true, clickhouse: true) {
-  id: ID!                              # tokenId (decimal string)
+  id: ID! # tokenId (decimal string)
   question: String!
   slug: String!
-  outcomes: String!                    # JSON array e.g. '["Yes","No"]'
-  outcomePrices: String!               # JSON array e.g. '["0.6","0.4"]'
+  outcomes: String! # JSON array e.g. '["Yes","No"]'
+  outcomePrices: String! # JSON array e.g. '["0.6","0.4"]'
   description: String!
   image: String!
   startDate: String!
@@ -26,28 +26,28 @@ type OrderFill @storage(postgres: true, clickhouse: true) {
   orderHash: String!
   maker: String!
   taker: String!
-  side: Int!                           # 0=BUY, 1=SELL
-  tokenId: BigInt!                     # conditional token ID
-  market: Market                       # enriched from Gamma API
+  side: Int! # 0=BUY, 1=SELL
+  tokenId: BigInt! # conditional token ID
+  market: Market # enriched from Gamma API
   makerAmountFilled: BigInt!
   takerAmountFilled: BigInt!
   fee: BigInt!
-  builder: String!                     # builder code (bytes32)
-  metadata: String!                    # metadata (bytes32)
-  exchange: String!                    # source exchange address
+  builder: String! # builder code (bytes32)
+  metadata: String! # metadata (bytes32)
+  exchange: String! # source exchange address
   timestamp: Int!
   blockNumber: Int!
   transactionHash: String!
-  txFrom: String!                      # transaction sender
+  txFrom: String! # transaction sender
 }
 
 type OrderMatch @storage(postgres: true, clickhouse: true) {
   id: ID!
   takerOrderHash: String!
   takerOrderMaker: String!
-  side: Int!                           # 0=BUY, 1=SELL
+  side: Int! # 0=BUY, 1=SELL
   tokenId: BigInt!
-  market: Market                       # enriched from Gamma API
+  market: Market # enriched from Gamma API
   makerAmountFilled: BigInt!
   takerAmountFilled: BigInt!
   exchange: String!
@@ -79,9 +79,9 @@ type PolyUSDTransfer @storage(clickhouse: true) {
 
 type PolyUSDWrap @storage(clickhouse: true) {
   id: ID!
-  eventType: String!                   # "wrap" | "unwrap"
+  eventType: String! # "wrap" | "unwrap"
   caller: String!
-  asset: String!                       # underlying asset (USDC or USDC.e)
+  asset: String! # underlying asset (USDC or USDC.e)
   to: String!
   amount: BigInt!
   timestamp: Int!
@@ -90,7 +90,7 @@ type PolyUSDWrap @storage(clickhouse: true) {
 }
 
 type PolyUSDAccount @storage(postgres: true, clickhouse: true) {
-  id: ID!                              # address
+  id: ID! # address
   balance: BigInt!
   totalWrapped: BigInt!
   totalUnwrapped: BigInt!
@@ -108,7 +108,7 @@ type RewardDistribution @storage(clickhouse: true) {
 }
 
 type SponsoredMarket @storage(postgres: true, clickhouse: true) {
-  id: ID!                              # marketId (bytes32)
+  id: ID! # marketId (bytes32)
   startTime: Int!
   minSponsorDuration: Int!
   minSponsorAmount: BigInt!
@@ -120,7 +120,7 @@ type SponsoredMarket @storage(postgres: true, clickhouse: true) {
 }
 
 type Sponsorship @storage(clickhouse: true) {
-  id: ID!                              # txHash-logIndex
+  id: ID! # txHash-logIndex
   market: SponsoredMarket!
   sponsor: String!
   amount: BigInt!
@@ -138,18 +138,91 @@ type Sponsorship @storage(clickhouse: true) {
 # ── Aggregate Stats ─────────────────────────────────────────────────
 
 type ExchangeStats @storage(postgres: true, clickhouse: true) {
-  id: ID!                              # exchange address
+  id: ID! # exchange address
   totalOrdersFilled: BigInt!
   totalOrdersMatched: BigInt!
   totalVolume: BigInt!
   totalFees: BigInt!
-  totalBuilderFills: BigInt!           # fills with non-zero builder code
+  totalBuilderFills: BigInt! # fills with non-zero builder code
 }
 
 type PolyUSDStats @storage(postgres: true, clickhouse: true) {
-  id: ID!                              # "polyusd"
+  id: ID! # "polyusd"
   totalSupply: BigInt!
   totalWrapped: BigInt!
   totalUnwrapped: BigInt!
   totalTransfers: BigInt!
+}
+
+# ── Sponsorship Withdrawals ─────────────────────────────────────────
+# Sponsorship is an insert-only ClickHouse stream, so withdrawals are
+# recorded as their own events and joined at query time (market + sponsor).
+
+type SponsorshipWithdrawal @storage(clickhouse: true) {
+  id: ID! # chainId_block_logIndex
+  market: SponsoredMarket!
+  sponsor: String!
+  returnedAmount: BigInt!
+  consumedAmount: BigInt!
+  isEarlyWithdraw: Boolean!
+  timestamp: Int!
+  blockNumber: Int!
+  transactionHash: String!
+}
+
+# ── CtfCollateralAdapter (pUSD-backed CTF position lifecycle) ───────
+
+type CtfSplit @storage(clickhouse: true) {
+  id: ID! # chainId_block_logIndex
+  stakeholder: String!
+  collateralToken: String!
+  parentCollectionId: String!
+  conditionId: String!
+  partition: [BigInt!]!
+  amount: BigInt!
+  txFrom: String!
+  timestamp: Int!
+  blockNumber: Int!
+  transactionHash: String!
+  isNegRisk: Boolean!
+}
+
+type CtfMerge @storage(clickhouse: true) {
+  id: ID!
+  stakeholder: String!
+  collateralToken: String!
+  parentCollectionId: String!
+  conditionId: String!
+  partition: [BigInt!]!
+  amount: BigInt!
+  txFrom: String!
+  timestamp: Int!
+  blockNumber: Int!
+  transactionHash: String!
+  isNegRisk: Boolean!
+}
+
+type CtfRedemption @storage(clickhouse: true) {
+  id: ID!
+  redeemer: String!
+  collateralToken: String!
+  parentCollectionId: String!
+  conditionId: String!
+  indexSets: [BigInt!]!
+  payout: BigInt!
+  txFrom: String!
+  timestamp: Int!
+  blockNumber: Int!
+  transactionHash: String!
+  isNegRisk: Boolean!
+}
+
+type CtfAdapterStats @storage(postgres: true, clickhouse: true) {
+  id: ID! # adapter address
+  totalSplits: BigInt!
+  totalMerges: BigInt!
+  totalRedemptions: BigInt!
+  totalSplitVolume: BigInt!
+  totalMergeVolume: BigInt!
+  totalRedemptionPayout: BigInt!
 }

@@ -23,7 +23,9 @@ export const getMarketMetadata = createEffect(
     // dashboard needs live prices, it should pull those separately from the CLOB
     // orderbook — the indexer is not the right place for perpetually-fresh prices.
     cache: true,
-    rateLimit: { calls: 280, per: 10_000 }, // 280 req / 10s — under Gamma API 300/10s limit
+    // Each call may issue up to 2 HTTP requests (closed + open lookup), so
+    // 140 calls / 10s keeps worst-case request volume under Gamma's 300/10s.
+    rateLimit: { calls: 140, per: 10_000 },
   },
   async ({ input: tokenId }) => {
     // /markets/keyset is the cursor-paginated replacement for /markets.
@@ -37,28 +39,35 @@ export const getMarketMetadata = createEffect(
     // so envio does NOT cache the failure — only valid data lands in the cache.
     // The OrderFill for this event keeps market_id=null; the next event with
     // the same tokenId retries fresh.
-    const res = await fetch(
-      `https://gamma-api.polymarket.com/markets/keyset?clob_token_ids=${tokenId}`,
-      { signal: AbortSignal.timeout(1_000) },
-    );
-    if (!res.ok) {
-      throw new Error(`Gamma API ${res.status} for tokenId ${tokenId}`);
-    }
-
-    const body = (await res.json()) as {
-      markets?: Array<{
-        question?: string;
-        slug?: string;
-        outcomes?: string;
-        outcomePrices?: string;
-        description?: string;
-        image?: string;
-        startDate?: string;
-        endDate?: string;
-        conditionId?: string;
-      }>;
+    const fetchMarket = async (closedFilter: "true" | "false") => {
+      const res = await fetch(
+        `https://gamma-api.polymarket.com/markets/keyset?clob_token_ids=${tokenId}&closed=${closedFilter}`,
+        { signal: AbortSignal.timeout(1_000) },
+      );
+      if (!res.ok) {
+        throw new Error(`Gamma API ${res.status} for tokenId ${tokenId}`);
+      }
+      const body = (await res.json()) as {
+        markets?: Array<{
+          question?: string;
+          slug?: string;
+          outcomes?: string;
+          outcomePrices?: string;
+          description?: string;
+          image?: string;
+          startDate?: string;
+          endDate?: string;
+          conditionId?: string;
+        }>;
+      };
+      return body.markets?.[0];
     };
-    const market = body.markets?.[0];
+
+    // The keyset endpoint defaults to closed=false (observed 2026-07), so a
+    // bare clob_token_ids query silently misses resolved markets. An indexer
+    // replaying history mostly encounters closed markets, so query those
+    // first and fall back to open markets. There is no "either" filter value.
+    const market = (await fetchMarket("true")) ?? (await fetchMarket("false"));
     if (!market) return null;
 
     return {
