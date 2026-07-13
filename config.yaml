@@ -31,6 +31,19 @@ contracts:
       - event: "Wrapped(address indexed caller, address indexed asset, address indexed to, uint256 amount)"
       - event: "Unwrapped(address indexed caller, address indexed asset, address indexed to, uint256 amount)"
 
+  # ── CtfCollateralAdapter — pUSD-backed CTF position lifecycle ────
+  - name: CtfCollateralAdapter
+    events:
+      - event: "PositionSplit(address indexed stakeholder, address collateralToken, bytes32 indexed parentCollectionId, bytes32 indexed conditionId, uint256[] partition, uint256 amount)"
+      - event: "PositionsMerge(address indexed stakeholder, address collateralToken, bytes32 indexed parentCollectionId, bytes32 indexed conditionId, uint256[] partition, uint256 amount)"
+      - event: "PayoutRedemption(address indexed redeemer, address indexed collateralToken, bytes32 indexed parentCollectionId, bytes32 conditionId, uint256[] indexSets, uint256 payout)"
+
+  # ── NegRiskCtfCollateralAdapter — pUSD-backed neg-risk wrap/unwrap ─
+  - name: NegRiskCtfCollateralAdapter
+    events:
+      - event: "Wrapped(address indexed caller, address indexed asset, address indexed to, uint256 amount)"
+      - event: "Unwrapped(address indexed caller, address indexed asset, address indexed to, uint256 amount)"
+
   # ── Rewards ───────────────────────────────────────────────────────
   - name: Rewards
     events:
@@ -56,3 +69,9 @@ chains:
       # Rewards
       - name: Rewards
         address: 0xdd8db71ce3be8d71ff148b2163d64da181a29e8b
+      # CtfCollateralAdapter (pUSD-backed CTF positions)
+      - name: CtfCollateralAdapter
+        address: 0xada100874d00e3331d00f2007a9c336a65009718
+      # NegRiskCtfCollateralAdapter (pUSD-backed neg-risk CTF)
+      - name: NegRiskCtfCollateralAdapter
+        address: 0xada200001000ef00d07553cee7006808f895c6f1

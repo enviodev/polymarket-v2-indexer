@@ -43,7 +43,7 @@ describe("CTF Exchange V2", () => {
                   "endDate": "2026-12-31T00:00:00Z",
                   "id": "102936224134271070189104847090829839924697394514566827387181305960175107677216",
                   "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
-                  "outcomePrices": "["0.61", "0.39"]",
+                  "outcomePrices": "["1", "0"]",
                   "outcomes": "["Yes", "No"]",
                   "question": "US-Iran nuclear deal before 2027?",
                   "slug": "us-iran-nuclear-deal-before-2027",
@@ -61,7 +61,7 @@ describe("CTF Exchange V2", () => {
                   "endDate": "2026-12-31T00:00:00Z",
                   "id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
-                  "outcomePrices": "["0.61", "0.39"]",
+                  "outcomePrices": "["1", "0"]",
                   "outcomes": "["Yes", "No"]",
                   "question": "US-Iran nuclear deal before 2027?",
                   "slug": "us-iran-nuclear-deal-before-2027",
@@ -253,6 +253,18 @@ describe("CTF Exchange V2", () => {
       {
         "changes": [
           {
+            "ExchangeStats": {
+              "sets": [
+                {
+                  "id": "0xE111180000d2663C0091e4f400237545B87B996B",
+                  "totalBuilderFills": 0n,
+                  "totalFees": 0n,
+                  "totalOrdersFilled": 2n,
+                  "totalOrdersMatched": 1n,
+                  "totalVolume": 5000000n,
+                },
+              ],
+            },
             "Market": {
               "sets": [
                 {
@@ -267,7 +279,7 @@ describe("CTF Exchange V2", () => {
                   "endDate": "2026-12-31T00:00:00Z",
                   "id": "102936224134271070189104847090829839924697394514566827387181305960175107677216",
                   "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
-                  "outcomePrices": "["0.61", "0.39"]",
+                  "outcomePrices": "["1", "0"]",
                   "outcomes": "["Yes", "No"]",
                   "question": "US-Iran nuclear deal before 2027?",
                   "slug": "us-iran-nuclear-deal-before-2027",
@@ -285,7 +297,7 @@ describe("CTF Exchange V2", () => {
                   "endDate": "2026-12-31T00:00:00Z",
                   "id": "45763018441764333771124945243746174684578244015331389396782339063349542289693",
                   "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-x-iran-nuclear-deal-in-2025-3rpCC4Kl23Lc.jpg",
-                  "outcomePrices": "["0.61", "0.39"]",
+                  "outcomePrices": "["1", "0"]",
                   "outcomes": "["Yes", "No"]",
                   "question": "US-Iran nuclear deal before 2027?",
                   "slug": "us-iran-nuclear-deal-before-2027",
@@ -350,6 +362,51 @@ describe("CTF Exchange V2", () => {
                   "timestamp": 1775220779,
                   "tokenId": 45763018441764333771124945243746174684578244015331389396782339063349542289693n,
                   "transactionHash": "0x5a829009714d1e2b8e17383078b18f64ef195da5ccd056107ecf01c5a4737ed1",
+                },
+              ],
+            },
+            "PolyUSDAccount": {
+              "sets": [
+                {
+                  "balance": -2500000n,
+                  "id": "0xd74b83e161d23ef17C6247d4b2f6Be07160cEd75",
+                  "totalUnwrapped": 0n,
+                  "totalWrapped": 0n,
+                },
+                {
+                  "balance": 0n,
+                  "id": "0xE111180000d2663C0091e4f400237545B87B996B",
+                  "totalUnwrapped": 0n,
+                  "totalWrapped": 0n,
+                },
+                {
+                  "balance": -2500000n,
+                  "id": "0x6e0c80c90ea6c15917308F820Eac91Ce2724B5b5",
+                  "totalUnwrapped": 0n,
+                  "totalWrapped": 0n,
+                },
+                {
+                  "balance": 0n,
+                  "id": "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB",
+                  "totalUnwrapped": 0n,
+                  "totalWrapped": 0n,
+                },
+                {
+                  "balance": 0n,
+                  "id": "0xADa100874d00e3331D00F2007a9c336a65009718",
+                  "totalUnwrapped": 5000000n,
+                  "totalWrapped": 0n,
+                },
+              ],
+            },
+            "PolyUSDStats": {
+              "sets": [
+                {
+                  "id": "polyusd",
+                  "totalSupply": -5000000n,
+                  "totalTransfers": 4n,
+                  "totalUnwrapped": 5000000n,
+                  "totalWrapped": 0n,
                 },
               ],
             },
@@ -811,7 +868,9 @@ describe("CTF Exchange V2", () => {
     const stats = allStats[0]!;
     t.expect(stats.totalOrdersFilled).toBe(2n);
     t.expect(stats.totalOrdersMatched).toBe(1n);
-    t.expect(stats.totalVolume).toBe(6000000n);     // 1M + 5M
+    // Collateral units per side: BUY maker pays 1M collateral; SELL maker
+    // receives takerAmountFilled = 10M collateral (makerAmountFilled is tokens)
+    t.expect(stats.totalVolume).toBe(11000000n);
     t.expect(stats.totalFees).toBe(35000n);          // 10K + 25K
     t.expect(stats.totalBuilderFills).toBe(1n);      // only second fill has builder
   });

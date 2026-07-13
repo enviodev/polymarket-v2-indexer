@@ -76,11 +76,18 @@ indexer.onEvent(
     });
 
     const hasBuilder = event.params.builder !== ZERO_BYTES32;
+    // Volume in collateral units for both sides: on BUY fills the maker pays
+    // collateral (makerAmountFilled); on SELL fills the maker gives outcome
+    // tokens and receives collateral (takerAmountFilled).
+    const collateralAmount =
+      Number(event.params.side) === 0
+        ? event.params.makerAmountFilled
+        : event.params.takerAmountFilled;
 
     context.ExchangeStats.set({
       ...stats,
       totalOrdersFilled: stats.totalOrdersFilled + 1n,
-      totalVolume: stats.totalVolume + event.params.makerAmountFilled,
+      totalVolume: stats.totalVolume + collateralAmount,
       totalFees: stats.totalFees + event.params.fee,
       totalBuilderFills: stats.totalBuilderFills + (hasBuilder ? 1n : 0n),
     });
