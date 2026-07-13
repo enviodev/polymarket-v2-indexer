@@ -6,9 +6,11 @@ Indexes the new Polymarket V2 exchange stack on Polygon, built with [Envio Hyper
 
 | Contract | Address | What it tracks |
 |----------|---------|----------------|
-| **CTFExchange V2** (x3) | `0xe11118...`, `0xe2222d...0f59`, `0xe2222d...0036` | OrderFilled (with builder codes + metadata), OrdersMatched, FeeCharged, pause events |
+| **CTFExchange V2** (x3) | `0xe11118...`, `0xe2222d...0f59`, `0xe2222d...0036` | OrderFilled (with builder codes + metadata), OrdersMatched, FeeCharged (pause/admin events are logged but not persisted) |
 | **PolyUSD** | `0xc011a7e1...82dfb` | Transfers, balances, Wrapped/Unwrapped (USDC/USDC.e to pUSD) |
-| **Rewards** | `0xdd8db7...e8b` | Market sponsorship, reward distribution |
+| **CtfCollateralAdapter** | `0xada100...9718` | pUSD-backed CTF position lifecycle: splits, merges, redemptions |
+| **NegRiskCtfCollateralAdapter** | `0xada200...c6f1` | Neg-risk wrap/unwrap flows |
+| **Rewards** | `0xdd8db7...e8b` | Market sponsorship, withdrawals, reward distribution |
 
 ## What's new in V2
 
@@ -23,10 +25,17 @@ Indexes the new Polymarket V2 exchange stack on Polygon, built with [Envio Hyper
 - `OrderFill`: every V2 trade with maker, taker, side, tokenId, fee, builder code
 - `OrderMatch`: matched order pairs
 - `FeeEvent`: fee collection
+- `Market`: question, slug, outcomes and metadata from the Gamma API (closed
+  markets included — the keyset endpoint hides them by default)
 - `PolyUSDTransfer` / `PolyUSDWrap` / `PolyUSDAccount`: pUSD flow and balances
 - `PolyUSDStats`: total supply, wrapped/unwrapped volumes
-- `ExchangeStats`: per-exchange aggregates (volume, fills, fees, builder fills)
-- `SponsoredMarket` / `Sponsorship` / `RewardDistribution`: rewards system
+- `ExchangeStats`: per-exchange aggregates (volume in collateral units for
+  both sides, fills, fees, builder fills)
+- `CtfSplit` / `CtfMerge` / `CtfRedemption` / `CtfAdapterStats`: pUSD-backed
+  CTF position lifecycle via the collateral adapters
+- `SponsoredMarket` / `Sponsorship` / `SponsorshipWithdrawal` /
+  `RewardDistribution`: rewards system (withdrawals are separate rows —
+  `Sponsorship` is an insert-only ClickHouse stream; join on market + sponsor)
 
 ## Run locally
 
@@ -53,7 +62,7 @@ Visit http://localhost:8080 for the GraphQL playground (password: `testing`).
 pnpm test
 ```
 
-12 tests covering all handlers with real on-chain data (via HyperSync) and simulated events.
+15 tests covering all handlers with real on-chain data (via HyperSync) and simulated events.
 
 ## Pre-requisites
 
