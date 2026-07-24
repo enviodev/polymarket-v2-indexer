@@ -21,7 +21,9 @@ type Market @storage(postgres: true, clickhouse: true) {
 
 # ── Trading ─────────────────────────────────────────────────────────
 
-type OrderFill @storage(postgres: true, clickhouse: true) {
+type OrderFill
+  @index(fields: ["tokenId", "timestamp", "id"])
+  @storage(postgres: true, clickhouse: true) {
   id: ID!
   orderHash: String!
   maker: String!
