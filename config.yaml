@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=./node_modules/envio/evm.schema.json
 name: polymarket-v2-indexer
+disable_default_cross_chain: true # recommended; default in HyperIndex v4
 description: Polymarket V2 — CTF Exchange, PolyUSD, Rewards
 
 storage:

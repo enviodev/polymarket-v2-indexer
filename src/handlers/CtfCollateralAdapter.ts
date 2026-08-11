@@ -3,7 +3,6 @@ import { indexer } from "envio";
 const NEG_RISK_ADAPTER_ADDR = "0xada200001000ef00d07553cee7006808f895c6f1";
 
 const eventId = (event: {
-  chainId: number;
   block: { number: number };
   logIndex: number;
 }) => `${event.chainId}_${event.block.number}_${event.logIndex}`;
